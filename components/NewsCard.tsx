@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { HNItem } from "@/lib/hn";
 import {
   discussionUrl,
@@ -56,13 +57,14 @@ export function NewsCard({
     >
       <div className="flex items-start gap-3">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-neutral-50">
-          <img
+          <Image
             src={storyFaviconUrl(item)}
             alt=""
             width={24}
             height={24}
             className="h-6 w-6"
             loading="lazy"
+            unoptimized
           />
         </div>
         <div className="min-w-0 flex-1">

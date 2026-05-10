@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { HNItem } from "@/lib/hn";
 import {
   discussionUrl,
@@ -64,12 +65,13 @@ export function FeaturedStory({ item }: Props) {
         <div className="flex flex-col justify-between gap-5 border-t border-neutral-200 pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-md border border-neutral-200 bg-neutral-50">
-              <img
+              <Image
                 src={storyFaviconUrl(item)}
                 alt=""
                 width={28}
                 height={28}
                 className="h-7 w-7"
+                unoptimized
               />
             </div>
             <div>
