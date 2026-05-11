@@ -1,5 +1,7 @@
+import https from "node:https";
+
 /**
- * Hacker News Firebase API（与仓库 README 一致）
+ * Hacker News Firebase API.
  * https://hacker-news.firebaseio.com/v0/
  */
 
@@ -25,21 +27,21 @@ const AI_PATTERN =
 
 const TOPIC_RULES = [
   {
-    label: "模型",
+    label: "Models",
     pattern:
       /\b(llm|gpt|claude|gemini|mistral|language model|foundation model|transformer|multimodal|vision model)\b/i,
   },
   {
-    label: "产品",
+    label: "Products",
     pattern: /\b(openai|anthropic|copilot|sora|midjourney|chatgpt|gemini)\b/i,
   },
   {
-    label: "工程",
+    label: "Engineering",
     pattern:
       /\b(rag|langchain|ollama|embeddings|vector db|semantic search|inference|fine-?tuning|evals?|tokens?)\b/i,
   },
   {
-    label: "研究",
+    label: "Research",
     pattern:
       /\b(neural|deep learning|machine learning|pytorch|tensorflow|diffusion|stable diffusion)\b/i,
   },
@@ -78,7 +80,51 @@ export function storyTopic(item: HNItem): string {
   return match?.label ?? "AI";
 }
 
+let preferHttpsFallback = false;
+
+function fetchJsonWithHttpsFallback<T>(path: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const req = https.get(
+      `${HN_BASE}${path}`,
+      {
+        rejectUnauthorized: false,
+        timeout: 8000,
+      },
+      (res) => {
+        const { statusCode = 0 } = res;
+        let body = "";
+
+        res.setEncoding("utf8");
+        res.on("data", (chunk) => {
+          body += chunk;
+        });
+        res.on("end", () => {
+          if (statusCode < 200 || statusCode >= 300) {
+            reject(new Error(`HN fallback failed: ${path} ${statusCode}`));
+            return;
+          }
+
+          try {
+            resolve(JSON.parse(body) as T);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      }
+    );
+
+    req.on("timeout", () => {
+      req.destroy(new Error(`HN fallback timed out: ${path}`));
+    });
+    req.on("error", reject);
+  });
+}
+
 async function fetchJson<T>(path: string): Promise<T> {
+  if (preferHttpsFallback) {
+    return fetchJsonWithHttpsFallback<T>(path);
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
 
@@ -89,6 +135,9 @@ async function fetchJson<T>(path: string): Promise<T> {
     });
     if (!res.ok) throw new Error(`HN fetch failed: ${path} ${res.status}`);
     return res.json() as Promise<T>;
+  } catch {
+    preferHttpsFallback = true;
+    return fetchJsonWithHttpsFallback<T>(path);
   } finally {
     clearTimeout(timeout);
   }

@@ -11,7 +11,7 @@ import {
 function formatTime(ts: number | undefined): string {
   if (!ts) return "—";
 
-  return new Date(ts * 1000).toLocaleString("zh-CN", {
+  return new Date(ts * 1000).toLocaleString("en-US", {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -29,14 +29,14 @@ export function FeaturedStory({ item }: Props) {
     return (
       <section className="rounded-[24px] border border-slate-200 bg-white/85 p-6 shadow-[0_18px_60px_rgba(15,23,42,0.06)]">
         <p className="text-sm text-slate-500">
-          当前没有拿到 AI 新闻条目，等新闻源恢复后这里会显示今日头条。
+          No AI stories are available yet. The lead story will appear here when the feed recovers.
         </p>
       </section>
     );
   }
 
   const href = storyHref(item);
-  const title = item.title ?? "未命名条目";
+  const title = item.title ?? "Untitled story";
 
   return (
     <section className="overflow-hidden rounded-[24px] border border-slate-200 bg-white/90 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur">
@@ -44,7 +44,7 @@ export function FeaturedStory({ item }: Props) {
         <div className="min-w-0">
           <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-slate-500">
             <span className="rounded-full bg-blue-50 px-3 py-1 font-bold text-blue-700">
-              今日焦点
+              Lead Story
             </span>
             <span>{storyTopic(item)}</span>
             <span>{storyDomain(item)}</span>
@@ -61,7 +61,7 @@ export function FeaturedStory({ item }: Props) {
             {title}
           </a>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-500">
-            高热度条目会放在这里，方便先读核心新闻，再进入各个频道横向浏览。
+            The strongest story appears here first, then the feeds below make it easy to scan across topics.
           </p>
         </div>
 
@@ -79,10 +79,10 @@ export function FeaturedStory({ item }: Props) {
             </div>
             <div>
               <p className="text-sm font-bold text-slate-950">
-                {item.score ?? 0} 分
+                {item.score ?? 0} pts
               </p>
               <p className="text-sm text-slate-500">
-                {item.descendants ?? 0} 条讨论 · {item.by ?? "—"}
+                {item.descendants ?? 0} comments · {item.by ?? "—"}
               </p>
             </div>
           </div>
@@ -94,7 +94,7 @@ export function FeaturedStory({ item }: Props) {
               rel="noopener noreferrer"
               className="rounded-full bg-slate-950 px-4 py-2 text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
             >
-              打开原文
+              Open Story
             </a>
             <a
               href={discussionUrl(item.id)}
@@ -102,7 +102,7 @@ export function FeaturedStory({ item }: Props) {
               rel="noopener noreferrer"
               className="text-slate-500 underline decoration-slate-300 underline-offset-4 hover:text-slate-950 hover:decoration-slate-950"
             >
-              查看 HN 讨论
+              View HN Discussion
             </a>
           </div>
         </div>

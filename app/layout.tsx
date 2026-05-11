@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AI 新闻雷达 · Hacker News",
+  title: "AI News · Hacker News",
   description:
-    "基于 Hacker News 公开 API 的 AI 相关报道：最新新闻、24 小时精选、一周精选。",
+    "AI stories from the Hacker News public API: latest news, 24-hour picks, and weekly highlights.",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

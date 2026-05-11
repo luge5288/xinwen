@@ -87,10 +87,10 @@ function emptyData(error?: string): AiNewsPageData {
 
 function messageFromError(error: unknown): string {
   if (error instanceof Error) return error.message;
-  return "无法读取新闻源";
+  return "Unable to read the news feed";
 }
 
-/** 从 new 列表按时间顺序收集足够数量的 AI 报道 */
+/** Collect enough AI stories from the new feed in chronological order. */
 export async function getLatestAiNews(limit = 36, maxFetch = 180): Promise<HNItem[]> {
   const ids = await fetchStoryIds("newstories");
   const items = await fetchItems(ids.slice(0, maxFetch));
@@ -100,8 +100,8 @@ export async function getLatestAiNews(limit = 36, maxFetch = 180): Promise<HNIte
 }
 
 /**
- * 在时间窗内按 HN score 排序的「优质」AI 报道。
- * 合并 top / best 列表以覆盖近期高票内容。
+ * Rank high-quality AI stories in the selected time window by HN score.
+ * Combine top and best feeds to cover recent high-scoring content.
  */
 export async function getBestAiInWindow(
   windowSec: number,

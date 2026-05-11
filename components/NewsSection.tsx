@@ -63,7 +63,7 @@ export function NewsSection({
   items,
   showScore = true,
   tone = "latest",
-  emptyHint = "暂无匹配条目，请稍后刷新。",
+  emptyHint = "No matching stories yet. Check back soon.",
 }: Props) {
   const previewItems = items.slice(0, 6);
 
@@ -88,7 +88,7 @@ export function NewsSection({
           href={`#${id}`}
           className="shrink-0 text-sm font-semibold text-blue-600 underline-offset-4 hover:underline"
         >
-          查看更多 ↗
+          View More ↗
         </a>
       </header>
       {items.length === 0 ? (
@@ -110,7 +110,7 @@ export function NewsSection({
         </ul>
       )}
       <div className="border-t border-slate-100 px-5 py-3 text-right text-xs font-semibold text-slate-400">
-        共 {items.length} 条
+        {items.length} stories
       </div>
     </section>
   );

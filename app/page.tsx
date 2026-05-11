@@ -8,7 +8,7 @@ export const revalidate = 60;
 export const dynamic = "force-dynamic";
 
 function formatGeneratedAt(iso: string): string {
-  return new Date(iso).toLocaleString("zh-CN", {
+  return new Date(iso).toLocaleString("en-US", {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -19,8 +19,8 @@ function formatGeneratedAt(iso: string): string {
 function HnLogo() {
   return (
     <span className="flex h-9 w-9 flex-col items-center justify-center rounded-[10px] bg-[#ff6d2d] text-[11px] font-black leading-[0.86] tracking-tight text-white shadow-sm">
-      <span>HN</span>
-      <span>CN</span>
+      <span>AI</span>
+      <span>NEWS</span>
     </span>
   );
 }
@@ -64,21 +64,21 @@ export default async function Home() {
           <a href="#" className="flex items-center gap-3">
             <HnLogo />
             <span className="text-lg font-black tracking-tight text-slate-950">
-              HackerNews CN
+              AI News
             </span>
           </a>
           <nav className="hidden items-center gap-7 text-[15px] font-bold text-slate-700 md:flex">
             <a href="#hot" className="hover:text-blue-700">
-              热门
+              Hot
             </a>
             <a href="#latest" className="hover:text-blue-700">
-              最新
+              Latest
             </a>
             <a href="#best" className="hover:text-blue-700">
-              最佳
+              Best
             </a>
             <a href={HN_BASE} target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
-              问答
+              Ask
             </a>
             <a
               href={HN_BASE}
@@ -86,20 +86,20 @@ export default async function Home() {
               rel="noopener noreferrer"
               className="hover:text-blue-700"
             >
-              展示
+              Show
             </a>
             <a href="https://www.ycombinator.com/jobs" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
-              工作
+              Jobs
             </a>
           </nav>
           <div className="hidden items-center gap-3 sm:flex">
-            <HeaderIcon label="打开 Hacker News API">
+            <HeaderIcon label="Open Hacker News API">
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
                 <path d="M9 18c-4.51 2-5-2-7-2" />
               </svg>
             </HeaderIcon>
-            <HeaderIcon label="打开 Hacker News">
+            <HeaderIcon label="Open Hacker News">
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
                 <path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10Zm3.68-15.5h2.05l-4.48 5.12 5.27 6.88h-4.13l-3.24-4.18-3.7 4.18H5.4l4.79-5.47L5.14 6.5h4.23l2.93 3.88 3.38-3.88Z" />
               </svg>
@@ -110,30 +110,24 @@ export default async function Home() {
         <section className="mx-auto max-w-7xl px-5 pb-10 pt-10 text-center sm:px-8 sm:pb-16 sm:pt-16 lg:px-10">
           <HeroIcon />
           <h1 className="mx-auto mt-8 max-w-4xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-4xl font-black tracking-tight text-transparent sm:text-6xl">
-            HackerNews 中文版
+            AI News
           </h1>
           <p className="mx-auto mt-6 max-w-3xl text-lg font-semibold leading-8 text-slate-600">
-            汇总 Hacker News 里的 AI、模型、工程与产品动态，用更适合中文读者的卡片流展示热门、最新、最佳内容。
+            A focused Hacker News digest for AI, model, engineering, and product stories, organized into fast-scanning feeds.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-bold text-slate-500">
-            <span>
-              Sponsored by{" "}
-              <a href="https://news.ycombinator.com" target="_blank" rel="noopener noreferrer" className="text-violet-500 underline underline-offset-4">
-                AI Maker ↗
-              </a>
-            </span>
             <span className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
-              每 60 秒服务端刷新
+              Server refreshes every 60 seconds
             </span>
-            <span>更新于 {formatGeneratedAt(stats.generatedAt)}</span>
+            <span>Updated {formatGeneratedAt(stats.generatedAt)}</span>
           </div>
         </section>
 
         {stats.error && (
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
             <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              新闻源暂时不可用：{stats.error}
+              News source is temporarily unavailable: {stats.error}
             </div>
           </div>
         )}
@@ -141,24 +135,24 @@ export default async function Home() {
         <section className="mx-auto grid max-w-7xl gap-6 px-5 sm:px-8 lg:grid-cols-3 lg:px-10">
           <NewsSection
             id="hot"
-            title="热门"
-            subtitle="本周仍在被讨论的 AI 新闻"
+            title="Hot"
+            subtitle="AI stories still drawing attention this week"
             items={weekBest}
             tone="day"
             showScore
           />
           <NewsSection
             id="latest"
-            title="最新"
-            subtitle="按发布时间排序的新条目"
+            title="Latest"
+            subtitle="Fresh stories sorted by publish time"
             items={latest}
             tone="week"
             showScore
           />
           <NewsSection
             id="best"
-            title="最佳"
-            subtitle="24 小时内分数最高的条目"
+            title="Best"
+            subtitle="Top-scoring stories from the last 24 hours"
             items={dayBest}
             tone="latest"
             showScore
@@ -170,10 +164,10 @@ export default async function Home() {
             <FeaturedStory item={featured} />
             <div className="grid gap-4 rounded-[24px] border border-slate-200 bg-white/80 p-5 shadow-[0_18px_60px_rgba(15,23,42,0.05)] sm:grid-cols-4">
               {[
-                ["扫描条目", stats.scannedStories],
-                ["AI 匹配", stats.matchedStories],
-                ["最新新闻", latest.length],
-                ["最佳精选", weekBest.length],
+                ["Scanned", stats.scannedStories],
+                ["AI Matches", stats.matchedStories],
+                ["Latest", latest.length],
+                ["Best Picks", weekBest.length],
               ].map(([label, value]) => (
                 <div key={label} className="rounded-2xl bg-slate-50 px-4 py-4">
                   <p className="text-xs font-bold text-slate-500">{label}</p>
@@ -185,9 +179,9 @@ export default async function Home() {
 
           <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
             <section className="rounded-[24px] border border-slate-200 bg-white/90 p-5 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur">
-              <h2 className="text-base font-black text-slate-950">主要来源</h2>
+              <h2 className="text-base font-black text-slate-950">Top Sources</h2>
               {stats.sourceDomains.length === 0 ? (
-                <p className="mt-4 text-sm text-slate-500">暂无来源统计</p>
+                <p className="mt-4 text-sm text-slate-500">No source data yet</p>
               ) : (
                 <ul className="mt-4 space-y-3">
                   {stats.sourceDomains.map((source) => (
@@ -208,7 +202,7 @@ export default async function Home() {
             </section>
 
             <section className="rounded-[24px] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_18px_60px_rgba(15,23,42,0.12)]">
-              <h2 className="text-base font-black">API 状态</h2>
+              <h2 className="text-base font-black">API Status</h2>
               <dl className="mt-4 space-y-3 text-sm text-slate-300">
                 <div className="flex justify-between gap-4">
                   <dt>newstories</dt>
@@ -235,7 +229,7 @@ export default async function Home() {
 
         <footer className="mx-auto max-w-7xl px-5 pb-8 pt-4 sm:px-8 lg:px-10">
           <p className="rounded-[22px] border border-slate-200 bg-white/70 px-5 py-4 text-sm font-medium text-slate-500">
-            数据来自{" "}
+            Data from{" "}
             <a
               href={HN_BASE}
               target="_blank"
@@ -244,7 +238,7 @@ export default async function Home() {
             >
               Hacker News Firebase API
             </a>
-            ，AI 匹配基于标题与链接关键词。
+            . AI matching is based on title and URL keywords.
           </p>
         </footer>
       </main>
