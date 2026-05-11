@@ -4,6 +4,7 @@ import { getAiNewsPageData } from "@/lib/ai-news";
 import { HN_BASE } from "@/lib/hn";
 
 export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 function formatGeneratedAt(iso: string): string {
   return new Date(iso).toLocaleString("zh-CN", {
