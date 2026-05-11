@@ -79,11 +79,19 @@ export function storyTopic(item: HNItem): string {
 }
 
 async function fetchJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${HN_BASE}${path}`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) throw new Error(`HN fetch failed: ${path} ${res.status}`);
-  return res.json() as Promise<T>;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const res = await fetch(`${HN_BASE}${path}`, {
+      next: { revalidate: 60 },
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error(`HN fetch failed: ${path} ${res.status}`);
+    return res.json() as Promise<T>;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 export async function fetchStoryIds(
@@ -101,7 +109,7 @@ export async function fetchItem(id: number): Promise<HNItem | null> {
   }
 }
 
-const BATCH = 24;
+const BATCH = 64;
 
 export async function fetchItems(ids: number[]): Promise<HNItem[]> {
   const out: HNItem[] = [];

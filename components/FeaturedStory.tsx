@@ -27,12 +27,10 @@ type Props = {
 export function FeaturedStory({ item }: Props) {
   if (!item) {
     return (
-      <section className="border-y border-neutral-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-sm text-neutral-500">
-            当前没有拿到 AI 新闻条目，等新闻源恢复后这里会显示今日头条。
-          </p>
-        </div>
+      <section className="rounded-[24px] border border-slate-200 bg-white/85 p-6 shadow-[0_18px_60px_rgba(15,23,42,0.06)]">
+        <p className="text-sm text-slate-500">
+          当前没有拿到 AI 新闻条目，等新闻源恢复后这里会显示今日头条。
+        </p>
       </section>
     );
   }
@@ -41,11 +39,13 @@ export function FeaturedStory({ item }: Props) {
   const title = item.title ?? "未命名条目";
 
   return (
-    <section className="border-y border-neutral-200 bg-white">
-      <article className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[1.25fr_0.75fr] lg:px-8">
+    <section className="overflow-hidden rounded-[24px] border border-slate-200 bg-white/90 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur">
+      <article className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-8">
         <div className="min-w-0">
-          <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-neutral-500">
-            <span className="font-semibold text-neutral-950">今日头条</span>
+          <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-slate-500">
+            <span className="rounded-full bg-blue-50 px-3 py-1 font-bold text-blue-700">
+              今日焦点
+            </span>
             <span>{storyTopic(item)}</span>
             <span>{storyDomain(item)}</span>
             <time dateTime={item.time ? new Date(item.time * 1000).toISOString() : undefined}>
@@ -56,15 +56,18 @@ export function FeaturedStory({ item }: Props) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-balance text-3xl font-semibold leading-tight tracking-tight text-neutral-950 decoration-neutral-950/25 underline-offset-4 hover:underline sm:text-4xl"
+            className="block text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 decoration-slate-950/25 underline-offset-4 hover:underline sm:text-4xl"
           >
             {title}
           </a>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-500">
+            高热度条目会放在这里，方便先读核心新闻，再进入各个频道横向浏览。
+          </p>
         </div>
 
-        <div className="flex flex-col justify-between gap-5 border-t border-neutral-200 pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+        <div className="flex flex-col justify-between gap-5 rounded-2xl border border-slate-100 bg-slate-50/75 p-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-md border border-neutral-200 bg-neutral-50">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-white">
               <Image
                 src={storyFaviconUrl(item)}
                 alt=""
@@ -75,10 +78,10 @@ export function FeaturedStory({ item }: Props) {
               />
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-950">
+              <p className="text-sm font-bold text-slate-950">
                 {item.score ?? 0} 分
               </p>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-slate-500">
                 {item.descendants ?? 0} 条讨论 · {item.by ?? "—"}
               </p>
             </div>
@@ -89,7 +92,7 @@ export function FeaturedStory({ item }: Props) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
+              className="rounded-full bg-slate-950 px-4 py-2 text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
             >
               打开原文
             </a>
@@ -97,7 +100,7 @@ export function FeaturedStory({ item }: Props) {
               href={discussionUrl(item.id)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-500 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-950"
+              className="text-slate-500 underline decoration-slate-300 underline-offset-4 hover:text-slate-950 hover:decoration-slate-950"
             >
               查看 HN 讨论
             </a>

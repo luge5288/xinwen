@@ -1,9 +1,7 @@
-import Image from "next/image";
 import type { HNItem } from "@/lib/hn";
 import {
   discussionUrl,
   storyDomain,
-  storyFaviconUrl,
   storyHref,
   storyTopic,
 } from "@/lib/hn";
@@ -36,9 +34,9 @@ type Props = {
 };
 
 const toneClass = {
-  latest: "border-l-sky-500",
-  day: "border-l-amber-500",
-  week: "border-l-emerald-500",
+  latest: "before:bg-blue-500",
+  day: "before:bg-rose-500",
+  week: "before:bg-violet-500",
 };
 
 export function NewsCard({
@@ -53,75 +51,44 @@ export function NewsCard({
 
   return (
     <article
-      className={`group flex h-full flex-col rounded-lg border border-l-4 border-neutral-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-neutral-900 hover:shadow-md ${toneClass[tone]}`}
+      className={`group relative rounded-md px-5 py-4 transition hover:bg-slate-50/85 before:absolute before:left-0 before:top-6 before:h-1.5 before:w-1.5 before:rounded-full ${toneClass[tone]}`}
     >
-      <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-neutral-200 bg-neutral-50">
-          <Image
-            src={storyFaviconUrl(item)}
-            alt=""
-            width={24}
-            height={24}
-            className="h-6 w-6"
-            loading="lazy"
-            unoptimized
-          />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-neutral-500">
-            {rank != null && (
-              <span className="font-mono text-neutral-900">
-                #{String(rank).padStart(2, "0")}
-              </span>
-            )}
-            <span className="truncate">{domain}</span>
-            <span aria-hidden="true">·</span>
-            <span>{storyTopic(item)}</span>
-          </div>
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block text-base font-semibold leading-snug text-neutral-950 decoration-neutral-950/30 underline-offset-4 group-hover:underline"
-          >
-            {title}
-          </a>
-        </div>
+      <div className="flex items-start justify-between gap-3">
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="line-clamp-2 text-[15px] font-semibold leading-6 text-slate-900 decoration-slate-400 underline-offset-4 group-hover:underline"
+        >
+          {title}
+        </a>
+        <span className="mt-1 shrink-0 text-slate-400 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-600">
+          ↗
+        </span>
       </div>
 
-      <div className="mt-4 flex flex-1 flex-col justify-end gap-3">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-neutral-500">
-          {showScore && (
-            <span className="font-medium text-neutral-900">
-              {item.score ?? 0} 分
-            </span>
-          )}
-          <span>{item.descendants ?? 0} 评论</span>
-          <span>{item.by ?? "—"}</span>
-          <time dateTime={item.time ? new Date(item.time * 1000).toISOString() : undefined}>
-            {formatRelativeTime(item.time)}
-          </time>
-          <span className="text-neutral-400">{formatAbsoluteTime(item.time)}</span>
-        </div>
-
-        <div className="flex items-center gap-3 text-xs font-medium">
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-neutral-900 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-950"
-          >
-            原文
-          </a>
-          <a
-            href={discussionUrl(item.id)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-neutral-500 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-950 hover:decoration-neutral-950"
-          >
-            HN 讨论
-          </a>
-        </div>
+      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] font-medium text-slate-500">
+        {rank != null && (
+          <span className="text-slate-400">#{String(rank).padStart(2, "0")}</span>
+        )}
+        {showScore && <span>{item.score ?? 0} 分</span>}
+        <span className="h-1 w-1 rounded-full bg-emerald-400" aria-hidden="true" />
+        <span className="max-w-28 truncate">{domain}</span>
+        <span className="h-1 w-1 rounded-full bg-violet-400" aria-hidden="true" />
+        <span>{storyTopic(item)}</span>
+        <span className="h-1 w-1 rounded-full bg-slate-300" aria-hidden="true" />
+        <time dateTime={item.time ? new Date(item.time * 1000).toISOString() : undefined}>
+          {formatRelativeTime(item.time)}
+        </time>
+        <a
+          href={discussionUrl(item.id)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-slate-400 underline-offset-4 hover:text-blue-600 hover:underline"
+        >
+          {item.descendants ?? 0} 评
+        </a>
+        <span className="sr-only">{formatAbsoluteTime(item.time)}</span>
       </div>
     </article>
   );

@@ -133,10 +133,10 @@ export async function getAiNewsPageData(): Promise<AiNewsPageData> {
       fetchStoryIds("beststories"),
     ]);
 
-    const latestIds = newIds.slice(0, 260);
+    const latestIds = newIds.slice(0, 140);
     const qualityIds = uniqueIds([
-      ...topIds.slice(0, 240),
-      ...bestIds.slice(0, 240),
+      ...topIds.slice(0, 140),
+      ...bestIds.slice(0, 140),
       ...latestIds,
     ]);
     const allIds = uniqueIds([...latestIds, ...qualityIds]);
