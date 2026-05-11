@@ -2,6 +2,7 @@ import { FeaturedStory } from "@/components/FeaturedStory";
 import { NewsSection } from "@/components/NewsSection";
 import { getAiNewsPageData } from "@/lib/ai-news";
 import { HN_BASE } from "@/lib/hn";
+import { faqItems, faqJsonLd, websiteJsonLd } from "@/lib/seo";
 import type { ReactNode } from "react";
 
 export const revalidate = 60;
@@ -59,6 +60,12 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,#dbeafe_0,#eef6ff_30%,transparent_58%),linear-gradient(135deg,#0f4ca8_0%,#3f36b8_42%,#cf59b8_100%)] p-0 text-slate-950 sm:p-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([websiteJsonLd(), faqJsonLd()]),
+        }}
+      />
       <main className="min-h-screen rounded-none border border-white/40 bg-[linear-gradient(115deg,rgba(239,246,255,0.96),rgba(255,255,255,0.95)_52%,rgba(250,245,255,0.96))] shadow-[0_30px_120px_rgba(15,23,42,0.25)] sm:rounded-[28px]">
         <header className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 sm:px-8 lg:px-10">
           <a href="#" className="flex items-center gap-3">
@@ -228,6 +235,24 @@ export default async function Home() {
         </section>
 
         <footer className="mx-auto max-w-7xl px-5 pb-8 pt-4 sm:px-8 lg:px-10">
+          <section className="mb-6">
+            <h2 className="text-xl font-black text-slate-950">FAQ</h2>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {faqItems.map((item) => (
+                <details
+                  key={item.question}
+                  className="rounded-md border border-slate-200 bg-white/75 px-5 py-4 text-left shadow-[0_12px_36px_rgba(15,23,42,0.04)]"
+                >
+                  <summary className="cursor-pointer text-sm font-black text-slate-950">
+                    {item.question}
+                  </summary>
+                  <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </section>
           <p className="rounded-[22px] border border-slate-200 bg-white/70 px-5 py-4 text-sm font-medium text-slate-500">
             Data from{" "}
             <a
