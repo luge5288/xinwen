@@ -158,7 +158,7 @@ export async function fetchItem(id: number): Promise<HNItem | null> {
   }
 }
 
-const BATCH = 64;
+const BATCH = 256;
 
 export async function fetchItems(ids: number[]): Promise<HNItem[]> {
   const out: HNItem[] = [];

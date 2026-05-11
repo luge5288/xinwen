@@ -10,6 +10,10 @@ const NOW = () => Math.floor(Date.now() / 1000);
 const HOUR = 3600;
 const DAY = 24 * HOUR;
 const WEEK = 7 * DAY;
+const PAGE_DATA_TIMEOUT_MS = 8000;
+const STORIES_PER_FEED = 100;
+
+let lastSuccessfulData: AiNewsPageData | null = null;
 
 export type AiNewsPageData = {
   latest: HNItem[];
@@ -90,6 +94,32 @@ function messageFromError(error: unknown): string {
   return "Unable to read the news feed";
 }
 
+function withError(data: AiNewsPageData, error: string): AiNewsPageData {
+  return {
+    ...data,
+    stats: {
+      ...data.stats,
+      error,
+    },
+  };
+}
+
+function hasNews(data: AiNewsPageData): boolean {
+  return data.latest.length > 0 || data.dayBest.length > 0 || data.weekBest.length > 0;
+}
+
+function timeoutData(ms = PAGE_DATA_TIMEOUT_MS): Promise<AiNewsPageData> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(
+        lastSuccessfulData
+          ? withError(lastSuccessfulData, "Showing the latest cached news while the source refreshes")
+          : emptyData("News source took too long to respond")
+      );
+    }, ms);
+  });
+}
+
 /** Collect enough AI stories from the new feed in chronological order. */
 export async function getLatestAiNews(limit = 36, maxFetch = 180): Promise<HNItem[]> {
   const ids = await fetchStoryIds("newstories");
@@ -124,7 +154,7 @@ export async function getBestAiInWindow(
   return filtered.slice(0, limit);
 }
 
-export async function getAiNewsPageData(): Promise<AiNewsPageData> {
+async function collectAiNewsPageData(): Promise<AiNewsPageData> {
   try {
     const generatedAt = new Date().toISOString();
     const [newIds, topIds, bestIds] = await Promise.all([
@@ -133,10 +163,10 @@ export async function getAiNewsPageData(): Promise<AiNewsPageData> {
       fetchStoryIds("beststories"),
     ]);
 
-    const latestIds = newIds.slice(0, 140);
+    const latestIds = newIds.slice(0, STORIES_PER_FEED);
     const qualityIds = uniqueIds([
-      ...topIds.slice(0, 140),
-      ...bestIds.slice(0, 140),
+      ...topIds.slice(0, STORIES_PER_FEED),
+      ...bestIds.slice(0, STORIES_PER_FEED),
       ...latestIds,
     ]);
     const allIds = uniqueIds([...latestIds, ...qualityIds]);
@@ -183,4 +213,15 @@ export async function getAiNewsPageData(): Promise<AiNewsPageData> {
   } catch (error) {
     return emptyData(messageFromError(error));
   }
+}
+
+export async function getAiNewsPageData(): Promise<AiNewsPageData> {
+  const pending = collectAiNewsPageData().then((data) => {
+    if (hasNews(data)) {
+      lastSuccessfulData = data;
+    }
+    return data;
+  });
+
+  return Promise.race([pending, timeoutData()]);
 }

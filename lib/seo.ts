@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "AI News",
-  defaultUrl: "https://example.com",
+  defaultUrl: "http://localhost:3000",
   description:
     "A fast-scanning AI news digest built from Hacker News stories about models, agents, engineering, research, and AI products.",
   keywords: [
@@ -17,7 +17,11 @@ export const siteConfig = {
 };
 
 export function getSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim() || siteConfig.defaultUrl;
+  const vercelUrl =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    (vercelUrl ? `https://${vercelUrl}` : siteConfig.defaultUrl);
 
   try {
     const url = new URL(raw);
